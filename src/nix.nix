@@ -20,39 +20,39 @@ in {
   disabledModules = [];
   imports = [];
   config = lib.mkMerge [
-    {
-      nix = {
-        settings = {
-          substituters = foldMachines [] (acc: key: mcn:
-            if mcn.substituter.enable
-            then
-              acc
-              ++ [
-                "${mcn.substituter.protocol}://${mcn.fqdn}"
-              ]
-            else acc);
-          trusted-public-keys = foldMachines [] (acc: key: mcn:
-            if mcn.substituter.enable && (mcn.substituter.publicKey != null)
-            then acc ++ [mcn.substituter.publicKey]
-            else acc);
-        };
-        distributedBuilds = true;
-        buildMachines = foldMachines {} (acc: key: mcn:
-          if mcn.buildMachine.enable
-          then
-            acc
-            // {
-              ${mcn.fqdn} = {
-                hostName = mcn.fqdn;
-                protocol = "ssh-ng";
-                publicHostKey = mcn.ssh.publicHostKey;
-                supportedFeatures = mcn.buildMachine.supportedFeatures;
-                inherit (mcn.buildMachine) systems;
-              };
-            }
-          else acc);
-      };
-    }
+    # {
+    #   nix = {
+    #     settings = {
+    #       substituters = foldMachines [] (acc: key: mcn:
+    #         if mcn.substituter.enable
+    #         then
+    #           acc
+    #           ++ [
+    #             "${mcn.substituter.protocol}://${mcn.fqdn}"
+    #           ]
+    #         else acc);
+    #       trusted-public-keys = foldMachines [] (acc: key: mcn:
+    #         if mcn.substituter.enable && (mcn.substituter.publicKey != null)
+    #         then acc ++ [mcn.substituter.publicKey]
+    #         else acc);
+    #     };
+    #     distributedBuilds = true;
+    #     buildMachines = foldMachines {} (acc: key: mcn:
+    #       if mcn.buildMachine.enable
+    #       then
+    #         acc
+    #         // {
+    #           ${mcn.fqdn} = {
+    #             hostName = mcn.fqdn;
+    #             protocol = "ssh-ng";
+    #             publicHostKey = mcn.ssh.publicHostKey;
+    #             supportedFeatures = mcn.buildMachine.supportedFeatures;
+    #             inherit (mcn.buildMachine) systems;
+    #           };
+    #         }
+    #       else acc);
+    #   };
+    # }
     (lib.mkIf config.nix.sshServe.write {
       nix.settings.trusted-users = ["nix-ssh"];
     })
