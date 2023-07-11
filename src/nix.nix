@@ -47,7 +47,7 @@ in {
                 protocol = "ssh-ng";
                 publicHostKey = mcn.ssh.publicHostKey;
                 supportedFeatures = mcn.buildMachine.supportedFeatures;
-                inherit (mcn) systems;
+                inherit (mcn.buildMachine) systems;
               };
             }
           else acc);
